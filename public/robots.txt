@@ -1,0 +1,17 @@
+# Robots.txt for Free Online Invoice Generator
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemap location
+Sitemap: https://freeonlineinvoice.org/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
+
+# Allow search engines to index CSS and JS for proper rendering
+Allow: /styles.css
+Allow: /script.js
+Allow: /sitemap.xml
+Allow: /robots.txt

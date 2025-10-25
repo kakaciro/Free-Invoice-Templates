@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/submit-invoice.js": {
+      "memory": 1024
+    },
+    "api/supabase-blog.js": {
+      "memory": 1024
+    },
+    "api/get-posts.js": {
+      "memory": 1024
+    }
+  }
+}

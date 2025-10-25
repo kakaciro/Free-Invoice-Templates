@@ -1,0 +1,313 @@
+# N8N 与 JSON 文件内容管理系统集成方案
+
+## 目标
+将 N8N 自动生成的文章统一保存到 `articles/` 文件夹中的 JSON 文件，实现完全的文件化管理。
+
+## 方案概述
+
+### 方案 A：修改现有 API 端点
+修改 `api/supabase-blog.js` 使其同时：
+1. 保存到 Supabase 数据库（保持现有功能）
+2. 自动更新本地 `articles/articles.json` 文件
+
+### 方案 B：创建专用 JSON API 端点
+创建新的 API 端点专门处理 JSON 文件更新
+
+## 推荐方案：方案 A（修改现有端点）
+
+### 修改 `api/supabase-blog.js`
+
+```javascript
+// 在现有代码基础上添加 JSON 文件更新功能
+import fs from 'fs';
+import path from 'path';
+
+// 在成功保存到 Supabase 后，添加以下代码：
+const articlesFilePath = path.join(process.cwd(), 'articles', 'articles.json');
+
+// 读取现有文章数据
+let articlesData = { articles: [] };
+try {
+  const existingData = fs.readFileSync(articlesFilePath, 'utf8');
+  articlesData = JSON.parse(existingData);
+} catch (error) {
+  console.log('Creating new articles file...');
+}
+
+// 创建新文章对象
+const newArticle = {
+  id: articlesData.articles.length + 1,
+  slug: generatedSlug,
+  title: title,
+  description: content.substring(0, 150) + '...', // 从内容生成描述
+  content: content,
+  author: author,
+  published_at: new Date().toISOString().split('T')[0],
+  category: category || 'business',
+  tags: tags ? (Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim())) : ['invoice', 'business'],
+  meta_title: title,
+  meta_description: generatedMetaDescription,
+  featured: articlesData.articles.length < 3 // 最新3篇文章设为精选
+};
+
+// 添加到文章列表开头（最新文章在前）
+articlesData.articles.unshift(newArticle);
+
+// 保存回文件
+fs.writeFileSync(articlesFilePath, JSON.stringify(articlesData, null, 2));
+
+console.log('Article saved to JSON file:', newArticle.slug);
+```
+
+## 实施步骤
+
+### 步骤 1：修改 API 端点
+
+<write_to_file>
+<path>api/supabase-blog-json.js</path>
+<content>// Supabase Blog API with JSON file integration
+import { createClient } from '@supabase/supabase-js'
+import fs from 'fs'
+import path from 'path'
+
+export default async function handler(req, res) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    console.log('Received request body:', JSON.stringify(req.body, null, 2));
+    
+    const { content, title, slug, category, author = 'Admin', meta_description, tags, keywords } = req.body;
+
+    // Validate required fields
+    const missingFields = [];
+    if (!title || title.trim() === '') missingFields.push('title');
+    if (!content || content.trim() === '') missingFields.push('content');
+    
+    if (missingFields.length > 0) {
+      return res.status(400).json({ 
+        error: `Missing required fields: ${missingFields.join(', ')}`,
+        received_data: req.body,
+        note: 'Please ensure title and content are provided and not empty'
+      });
+    }
+
+    // Initialize Supabase client
+    const supabaseUrl = process.env.SUPABASE_URL || 'https://pytavytnuhvkghldkxlp.supabase.co';
+    const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+    // CRITICAL: The service role key must be set in the environment variables for this to work.
+    if (!supabaseKey) {
+      console.error('Supabase service key is missing. Please set the SUPABASE_SERVICE_KEY environment variable in your deployment settings.');
+      return res.status(500).json({
+        error: 'Server configuration error: Supabase service key is not available.',
+        message: 'The API cannot connect to the database securely. The SUPABASE_SERVICE_KEY must be provided.'
+      });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Auto-generate slug from title if not provided
+    const generatedSlug = slug || title.toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .replace(/\s+/g, '-')
+      .substring(0, 50);
+
+    // Auto-generate meta description if not provided
+    const generatedMetaDescription = meta_description || content.substring(0, 160) + '...';
+
+    // Auto-generate keywords if not provided
+    const generatedKeywords = keywords || extractKeywords(title, content);
+
+    // Calculate SEO metrics
+    const seoMetrics = calculateSEOMetrics(title, content, generatedMetaDescription);
+
+    // Prepare blog post data - using English field names for Supabase table
+    const blogPostData = {
+      title: title,
+      content: content,
+      slug: generatedSlug,
+      category: category || 'business',
+      author: author,
+      meta_description: generatedMetaDescription,
+      keywords: generatedKeywords,
+      tags: tags ? (Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim())) : ['invoice', 'business'],
+      published_at: new Date().toISOString(),
+      status: 'published',
+      seo_score: seoMetrics.score,
+      word_count: seoMetrics.wordCount,
+      reading_time: seoMetrics.readingTime,
+      keyword_density: seoMetrics.keywordDensity
+    };
+
+    // Insert blog post into Supabase - using English field names
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .insert([blogPostData])
+      .select();
+
+    if (error) {
+      console.error('Supabase insert error:', JSON.stringify(error, null, 2));
+      return res.status(500).json({
+        error: 'Failed to save blog post to database. This is likely an issue with database permissions (RLS) or schema mismatch.',
+        details: error.message,
+        supabase_error: error // Provide the full error object for debugging
+      });
+    }
+
+    console.log('Blog post saved to Supabase:', {
+      id: data[0].id,
+      title,
+      slug: generatedSlug,
+      seo_score: blogPostData.seo_score,
+      word_count: blogPostData.word_count
+    });
+
+    // ========== JSON FILE INTEGRATION ==========
+    try {
+      // Update articles.json file
+      const articlesFilePath = path.join(process.cwd(), 'articles', 'articles.json');
+      
+      // Read existing articles
+      let articlesData = { articles: [] };
+      try {
+        const existingData = fs.readFileSync(articlesFilePath, 'utf8');
+        articlesData = JSON.parse(existingData);
+      } catch (error) {
+        console.log('Creating new articles file or reading existing...');
+      }
+
+      // Create new article object for JSON file
+      const newArticle = {
+        id: articlesData.articles.length > 0 ? Math.max(...articlesData.articles.map(a => a.id)) + 1 : 1,
+        slug: generatedSlug,
+        title: title,
+        description: content.substring(0, 150) + '...',
+        content: content,
+        author: author,
+        published_at: new Date().toISOString().split('T')[0],
+        category: category || 'business',
+        tags: tags ? (Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim())) : ['invoice', 'business'],
+        meta_title: title,
+        meta_description: generatedMetaDescription,
+        featured: articlesData.articles.filter(a => a.featured).length < 3 // Only feature latest 3 articles
+      };
+
+      // Add to beginning of array (newest first)
+      articlesData.articles.unshift(newArticle);
+
+      // Save back to file
+      fs.writeFileSync(articlesFilePath, JSON.stringify(articlesData, null, 2));
+
+      console.log('Article saved to JSON file:', newArticle.slug);
+      
+    } catch (jsonError) {
+      console.error('Error saving to JSON file:', jsonError);
+      // Don't fail the entire request if JSON save fails
+    }
+    // ========== END JSON FILE INTEGRATION ==========
+
+    return res.status(200).json({
+      success: true,
+      message: 'Blog post saved successfully to database and JSON file with advanced SEO optimization',
+      data: {
+        id: data[0].id,
+        title,
+        slug: generatedSlug,
+        category: blogPostData.category,
+        author,
+        meta_description: blogPostData.meta_description,
+        keywords: blogPostData.keywords,
+        seo_score: blogPostData.seo_score,
+        word_count: blogPostData.word_count,
+        reading_time: blogPostData.reading_time,
+        keyword_density: blogPostData.keyword_density,
+        url: `/blog/${generatedSlug}`,
+        timestamp: new Date().toISOString(),
+        json_saved: true
+      }
+    });
+
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    return res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+}
+
+// Extract keywords from title and content
+function extractKeywords(title, content) {
+  const text = title + ' ' + content;
+  const words = text.toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .split(/\s+/)
+    .filter(word => word.length > 3);
+  
+  const wordFreq = {};
+  words.forEach(word => {
+    wordFreq[word] = (wordFreq[word] || 0) + 1;
+  });
+
+  // Return top 5 keywords
+  return Object.entries(wordFreq)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 5)
+    .map(([word]) => word);
+}
+
+// Calculate comprehensive SEO metrics
+function calculateSEOMetrics(title, content, metaDescription) {
+  let score = 0;
+  const wordCount = content.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / 200); // Average reading speed
+  
+  // Title optimization (50-60 characters optimal)
+  const titleLength = title.length;
+  if (titleLength >= 50 && titleLength <= 60) score += 25;
+  else if (titleLength >= 40 && titleLength <= 70) score += 15;
+  else score += 5;
+
+  // Content length (800+ words optimal for SEO)
+  if (wordCount >= 1200) score += 30;
+  else if (wordCount >= 800) score += 25;
+  else if (wordCount >= 500) score += 20;
+  else if (wordCount >= 300) score += 15;
+  else score += 5;
+
+  // Meta description optimization (120-160 characters)
+  const metaLength = metaDescription.length;
+  if (metaLength >= 120 && metaLength <= 160) score += 20;
+  else if (metaLength >= 100 && metaLength <= 180) score += 15;
+  else score += 5;
+
+  // Keyword optimization
+  const keywords = extractKeywords(title, content);
+  const keywordDensity = calculateKeywordDensity(title + ' ' + content, keywords[0]);
+  if (keywordDensity >= 1 && keywordDensity <= 3) score += 15;
+  else score += 5;
+
+  // Content structure (headings, paragraphs)
+  const headingCount = (content.match(/#+\s/g) || []).length;
+  const paragraphCount = (content.split('\n\n').length);
+  if (headingCount >= 2 && paragraphCount >= 5) score += 10;
+  else score += 5;
+
+  return {
+    score: Math.min(score, 100),
+    wordCount,
+    readingTime,
+    keywordDensity
+  };
+}
+
+// Calculate keyword density
+function calculateKeywordDensity(text, keyword) {
+  if (!keyword) return 0;
+  const words = text.toLowerCase().split(/\s+/);
+  const keywordCount = words.filter(word => word === keyword.toLowerCase()).length;
+  return (keywordCount / words.length) * 100;
+}

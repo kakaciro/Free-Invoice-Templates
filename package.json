@@ -1,0 +1,40 @@
+{
+  "name": "free-online-invoice-generator",
+  "version": "1.0.0",
+  "description": "Free online invoice generator - create professional invoices instantly",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npm run build:articles && python -m http.server 8000 --directory public",
+    "serve": "npm run build:articles && python -m http.server 8000 --directory public",
+    "build": "npm run build:articles",
+    "build:articles": "node articles/build-articles.js",
+    "test": "echo 'No tests specified'",
+    "configure:supabase": "node scripts/supabase-url-config.js"
+  },
+  "keywords": [
+    "invoice",
+    "generator",
+    "free",
+    "online",
+    "pdf",
+    "business",
+    "billing"
+  ],
+  "author": "freeonlineinvoice.org",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/free-online-invoice-generator"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "@supabase/supabase-js": "^2.0.0",
+    "@vercel/blob": "latest",
+    "marked": "^16.4.1",
+    "puppeteer": "^24.26.1",
+    "vercel": "^48.6.0"
+  }
+}

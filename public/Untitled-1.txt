@@ -1,0 +1,104 @@
+/**
+ * 模式：Run Once for All Items
+ * 输入：上一节点（AI Agent）输出在 $input.item.json.output（或 .text）
+ * 旁路输入：Google Sheets / Edit Fields 的 SEO、URL 也会在 $input.item.json 里
+ */
+
+const item = $input.item.json;
+
+// 1) 读取 AI 输出（字符串或对象），并安全解析为对象
+function safeParse(raw) {
+  if (!raw) return {};
+  if (typeof raw !== 'string') return raw;
+  let s = raw.trim();
+  // 去掉 ```json ... ``` 代码块包装
+  s = s.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+  // 去掉尾逗号
+  s = s.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+  try {
+    return JSON.parse(s);
+  } catch (e) {
+    throw new Error('AI Agent 返回的不是合法 JSON：' + e.message + '\n原始片段：' + s.slice(0, 200));
+  }
+}
+
+const aiRaw = item.output ?? item.text ?? item; // 不同 Agent 可能是 output 或 text
+const data = safeParse(aiRaw);
+
+// 2) 校验必填
+if (!data.title || !data.content) {
+  throw new Error('缺少必填字段：title 或 content');
+}
+
+const SEO = item.SEO || '';
+const URL = item.URL || '';
+
+// 3) 若正文未包含该 URL，则插入一次链接（默认锚文本用 SEO 或“了解更多”）
+function ensureLinkOnce(content, url, anchorText) {
+  if (!url) return content;
+  const urlEscaped = url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const hasLink = new RegExp(`<a\\s[^>]*href=["']${urlEscaped}["']`, 'i').test(content);
+  if (hasLink) return content;
+  const text = anchorText || '了解更多';
+  // 插入在首个 H2 标题后，如果没有 H2，则在开头插入一段
+  if (/<h2[^>]*>.*?<\/h2>/i.test(content)) {
+    return content.replace(/(<h2[^>]*>.*?<\/h2>)/i, `$1\n<p><a href="${url}" rel="nofollow">${text}</a></p>`);
+  }
+  return `<p><a href="${url}" rel="nofollow">${text}</a></p>\n` + content;
+}
+
+data.content = ensureLinkOnce(data.content, URL, SEO);
+
+// 4) 生成 slug（基础版：去标签、转小写、空白转连字符）
+function makeSlug(title) {
+  const t = String(title)
+    .replace(/<[^>]+>/g, '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s-]+/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return t || ('post-' + Date.now());
+}
+const slug = makeSlug(data.title);
+
+// 5) meta 描述（去标签后取前 160 字符）
+const meta = data.content
+  .replace(/<[^>]+>/g, '')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .slice(0, 160);
+
+// 6) 生成整页 HTML（直接供 GitHub 节点写入）
+const html = `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="${meta}"/>
+  <link rel="stylesheet" href="/public/styles.css"/>
+  <title>${data.title}</title>
+</head>
+<body>
+  <main class="post">
+    <h1>${data.title}</h1>
+    <div class="content">
+      ${data.content}
+    </div>
+  </main>
+</body>
+</html>`;
+
+// 7) 输出给下一个节点
+return {
+  title: data.title,
+  content: data.content,
+  slug,
+  meta_description: meta,
+  path: `public/blog-posts/${slug}.html`,
+  html,
+  commitMessage: `Add blog post: ${data.title}`,
+  URL, // 保留，便于后续 API 同步
+  SEO, // 保留
+};

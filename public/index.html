@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Free Invoice Generator Online | Create Professional Invoices Instantly - No Sign Up</title>
+    <meta name="description" content="Create professional invoices instantly with our FREE online invoice generator. Download customizable invoice templates in PDF, Word, Excel formats. Perfect for small businesses, freelancers, and non-profits. No registration required.">
+    <meta name="keywords" content="free invoice generator, online invoice maker, create invoice online, professional invoice template, PDF invoice, business invoice, invoice software, small business invoicing, freelance invoice, non-profit invoice">
+    <meta name="author" content="freeonlineinvoice.org">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="general">
+    <meta name="distribution" content="global">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.freeonlineinvoice.org/">
+    <meta property="og:title" content="Free Invoice Templates | Create, Download & Print Online | Word, Excel, PDF">
+    <meta property="og:description" content="Create professional invoices instantly with our free invoice generator and templates. Download customizable invoice templates in Word, Excel, PDF formats. Make free invoices online quickly and easily.">
+    <meta property="og:image" content="https://freeonlineinvoice.org/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.freeonlineinvoice.org/">
+    <meta property="twitter:title" content="Free Invoice Templates | Create, Download & Print Online | Word, Excel, PDF">
+    <meta property="twitter:description" content="Create professional invoices instantly with our free invoice generator and templates. Download customizable invoice templates in Word, Excel, PDF formats. Make free invoices online quickly and easily.">
+    <meta property="twitter:image" content="https://freeonlineinvoice.org/images/twitter-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.freeonlineinvoice.org/">
+    
+    <!-- Referrer Policy -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzNiODJmNiIvPgo8dGV4dCB4PSIxNiIgeT0iMTgiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GcmVlIEludm9pY2U8L3RleHQ+Cjwvc3ZnPgo=">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- DNS prefetch for external domains -->
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://your-project.supabase.co">
+    
+    <!-- Supabase Client - Load asynchronously -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
+    <script src="config.js" async></script>
+    
+    <!-- Structured Data - Rich Snippets for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Free Invoice Templates",
+          "description": "Create professional invoices instantly with our free invoice generator and templates. Download customizable invoice templates in Word, Excel, PDF formats.",
+          "url": "https://www.freeonlineinvoice.org/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Any",
+          "permissions": "browser",
+          "author": {
+            "@type": "Organization",
+            "name": "freeonlineinvoice.org"
+          },
+          "screenshot": "https://freeonlineinvoice.org/images/screenshot.jpg"
+        },
+        {
+          "@type": "Organization",
+          "name": "Free Online Invoice Generator",
+          "url": "https://www.freeonlineinvoice.org/",
+          "logo": "https://freeonlineinvoice.org/images/logo.png",
+          "description": "Free online invoice generator for creating professional business invoices instantly.",
+          "sameAs": [
+            "https://twitter.com/freeonlineinvoice",
+            "https://facebook.com/freeonlineinvoice"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "name": "Free Online Invoice Generator",
+          "url": "https://www.freeonlineinvoice.org/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://freeonlineinvoice.org/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.freeonlineinvoice.org/"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is the invoice generator really free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our invoice generator is completely free with no hidden fees. You can create, customize, and download professional invoices without any cost."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What formats can I download my invoices in?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can download invoices in PDF format, which is compatible with all devices and can be easily printed or emailed to clients."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I add my company logo to invoices?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can easily upload your company logo and it will be automatically added to your invoice template for professional branding."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is this suitable for non-profit organizations?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely! Non-profit organizations can use our free invoice generator permanently at no cost."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <!-- PDF libraries are now loaded dynamically when needed -->
+</head>
+<body class="light-theme">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <header role="banner">
+            <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 itemprop="name">Free online invoice</h1>
+                    <p class="subtitle" itemprop="description">Permanent free online template</p>
+                </div>
+                <div class="header-actions">
+                    <!-- Removed login/register functionality as requested -->
+                </div>
+        </header>
+
+        <!-- Navigation Menu -->
+        <nav class="main-nav">
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/index.html" class="nav-link active">Invoice Generator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog & Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#features" class="nav-link">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#templates" class="nav-link">Templates</a>
+                    </li>
+                </ul>
+                <!-- Mobile Navigation Toggle -->
+                <button class="mobile-nav-toggle" aria-label="Toggle navigation menu">
+                    ☰
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-nav-overlay"></div>
+
+        <!-- Mobile Navigation Menu -->
+        <div class="mobile-nav-menu">
+            <button class="mobile-nav-close" aria-label="Close navigation menu">
+                ×
+            </button>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/index.html" class="nav-link active">Invoice Generator</a>
+                </li>
+                <li class="nav-item">
+                    <a href="blog.html" class="nav-link">Blog & Help</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#features" class="nav-link">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#templates" class="nav-link">Templates</a>
+                </li>
+            </ul>
+        </div>
+
+        <main class="main-content">
+            <div class="form-section">
+                <h2>Create Invoice</h2>
+                <form id="invoiceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoiceNumber">Invoice Number</label>
+                            <input type="text" id="invoiceNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="logoUpload">Company Logo</label>
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="logoUpload" accept="image/*" class="logo-upload">
+                                <label for="logoUpload" class="file-upload-label">Choose File</label>
+                            </div>
+                            <span id="fileChosen" class="file-chosen">No file chosen</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="invoiceDate">Invoice Date</label>
+                            <input type="date" id="invoiceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dueDate">Due Date</label>
+                            <input type="date" id="dueDate" required>
+                        </div>
+                    </div>
+
+                    <div class="section-divider">From</div>
+                    
+                    <div class="form-group">
+                        <label for="sellerName">Company Name</label>
+                        <input type="text" id="sellerName" value="InvoiceSnap Inc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sellerAddress">Company Address</label>
+                        <textarea id="sellerAddress" rows="2">123 Business Ave, Suite 100, New York, NY 10001</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sellerPhone">Phone</label>
+                            <input type="tel" id="sellerPhone" value="+1 (555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="sellerTaxId">Tax ID</label>
+                            <input type="text" id="sellerTaxId" value="12-3456789">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">Bill To</div>
+                    
+                    <div class="form-group">
+                        <label for="buyerName">Client Name</label>
+                        <input type="text" id="buyerName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyerAddress">Client Address</label>
+                        <textarea id="buyerAddress" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="buyerPhone">Phone</label>
+                            <input type="tel" id="buyerPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="buyerTaxId">Tax ID</label>
+                            <input type="text" id="buyerTaxId">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">Items</div>
+                    
+                    <div class="items-header">
+                        <span>Description</span>
+                        <span>Quantity</span>
+                        <span>Unit Price</span>
+                        <span>Amount</span>
+                        <span>Action</span>
+                    </div>
+                    
+                    <div id="itemsContainer">
+                        <div class="item-row" data-index="0">
+                            <input type="text" class="item-name" placeholder="Item description">
+                            <input type="number" class="item-quantity" placeholder="Qty" min="1" value="1">
+                            <input type="number" class="item-price" placeholder="Price" min="0" step="0.01">
+                            <span class="item-total">0.00</span>
+                            <button type="button" class="remove-item" disabled>×</button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addItem" class="add-item-btn">+ Add Item</button>
+
+                    <div class="totals-section">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax Rate (%):</span>
+                            <input type="number" id="taxRate" min="0" max="100" step="0.1" value="0">
+                        </div>
+                        <div class="total-row">
+                            <span>Tax Amount:</span>
+                            <span id="taxAmount">0.00</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total:</span>
+                            <span id="grandTotal">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Optional notes..."></textarea>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-actions">
+                    <button type="button" id="resetForm" class="btn-secondary">Reset</button>
+                    <button type="button" id="downloadPDF" class="btn-primary">Download PDF</button>
+                </div>
+                <h2>Invoice Preview</h2>
+                <div id="invoicePreview" class="invoice-preview">
+                    <div class="preview-header">
+                        <div class="company-info">
+                            <h2>InvoiceSnap</h2>
+                            <div class="invoice-meta">
+                                <p>Number: <span id="previewNumber">INV-001</span></p>
+                                <p>Date: <span id="previewDate">2024-01-01</span></p>
+                                <p>Due: <span id="previewDueDate">2024-01-31</span></p>
+                            </div>
+                        </div>
+                        <div class="logo-container">
+                            <img id="previewLogo" src="" alt="Company Logo" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="preview-parties">
+                        <div class="party-section seller-section">
+                            <h4>From</h4>
+                            <p><strong>Name:</strong> <span id="previewSellerName">InvoiceSnap Inc.</span></p>
+                            <p><strong>Address:</strong> <span id="previewSellerAddress">123 Business Ave, Suite 100, New York, NY 10001</span></p>
+                            <p><strong>Phone:</strong> <span id="previewSellerPhone">+1 (555) 123-4567</span></p>
+                            <p><strong>Tax ID:</strong> <span id="previewSellerTaxId">12-3456789</span></p>
+                        </div>
+                        
+                        <div class="party-section buyer-section">
+                            <h4>To</h4>
+                            <p><strong>Name:</strong> <span id="previewBuyerName"></span></p>
+                            <p><strong>Address:</strong> <span id="previewBuyerAddress"></span></p>
+                            <p><strong>Phone:</strong> <span id="previewBuyerPhone"></span></p>
+                            <p><strong>Tax ID:</strong> <span id="previewBuyerTaxId"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="preview-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewItemsBody">
+                                <tr>
+                                    <td colspan="4" class="no-items">No items</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="preview-totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="previewSubtotal">0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax Rate:</span>
+                            <span id="previewTaxRate">0%</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax Amount:</span>
+                            <span id="previewTaxAmount">0.00</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>Total:</span>
+                            <span id="previewGrandTotal">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="preview-notes">
+                        <p><strong>Notes:</strong> <span id="previewNotes"></span></p>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
