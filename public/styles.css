@@ -815,6 +815,19 @@ input::placeholder, textarea::placeholder {
     padding: 2rem 0;
 }
 
+/* Ensure mobile navigation only shows on mobile devices */
+@media (min-width: 769px) {
+    .mobile-nav-menu {
+        display: none !important;
+    }
+    .mobile-nav-overlay {
+        display: none !important;
+    }
+    .mobile-nav-toggle {
+        display: none !important;
+    }
+}
+
 .mobile-nav-menu.active {
     right: 0;
 }
