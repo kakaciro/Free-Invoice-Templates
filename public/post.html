@@ -19,50 +19,22 @@
     <!-- Navigation Menu -->
     <nav class="main-nav">
         <div class="nav-container">
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">Invoice Generator</a>
-                </li>
-                <li class="nav-item">
-                    <a href="blog.html" class="nav-link">Blog & Help</a>
-                </li>
-                <li class="nav-item">
-                    <a href="articles.html" class="nav-link">All Articles</a>
-                </li>
-                <li class="nav-item">
-                    <a href="how-to-use-invoice-generator.html" class="nav-link">How to Use Guide</a>
-                </li>
-            </ul>
-            <!-- Mobile Navigation Toggle -->
-            <button class="mobile-nav-toggle" aria-label="Toggle navigation menu">
-                ☰
-            </button>
-        </div>
-    </nav>
-
-    <!-- Mobile Navigation Overlay -->
-    <div class="mobile-nav-overlay"></div>
-
-    <!-- Mobile Navigation Menu -->
-    <div class="mobile-nav-menu">
-        <button class="mobile-nav-close" aria-label="Close navigation menu">
-            ×
-        </button>
-        <ul class="nav-menu">
-            <li class="nav-item">
-                <a href="index.html" class="nav-link">Invoice Generator</a>
-            </li>
-            <li class="nav-item">
-                <a href="blog.html" class="nav-link">Blog & Help</a>
-            </li>
-            <li class="nav-item">
-                <a href="articles.html" class="nav-link">All Articles</a>
-            </li>
-            <li class="nav-item">
-                <a href="how-to-use-invoice-generator.html" class="nav-link">How to Use Guide</a>
-            </li>
-        </ul>
-    </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Invoice Generator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="blog.html" class="nav-link">Blog & Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="articles.html" class="nav-link">All Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="how-to-use-invoice-generator.html" class="nav-link">How to Use Guide</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     <main class="site-container">
         <div class="post-container">
             <div id="post-content">
@@ -74,66 +46,5 @@
         <p><a href="blog.html">← Back to Blog</a></p>
     </footer>
     <script src="post-data.js"></script>
-    <script>
-        // Mobile Navigation Setup for Post Page
-        function setupMobileNavigation() {
-            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-            const mobileNavClose = document.querySelector('.mobile-nav-close');
-            const mobileNavMenu = document.querySelector('.mobile-nav-menu');
-            const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
-            const navLinks = document.querySelectorAll('.mobile-nav-menu .nav-link');
-
-            // Toggle mobile menu
-            function toggleMobileMenu() {
-                mobileNavMenu.classList.toggle('active');
-                mobileNavOverlay.classList.toggle('active');
-                document.body.style.overflow = mobileNavMenu.classList.contains('active') ? 'hidden' : '';
-            }
-
-            // Close mobile menu
-            function closeMobileMenu() {
-                mobileNavMenu.classList.remove('active');
-                mobileNavOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            // Event listeners
-            if (mobileNavToggle) {
-                mobileNavToggle.addEventListener('click', toggleMobileMenu);
-            }
-
-            if (mobileNavClose) {
-                mobileNavClose.addEventListener('click', closeMobileMenu);
-            }
-
-            if (mobileNavOverlay) {
-                mobileNavOverlay.addEventListener('click', closeMobileMenu);
-            }
-
-            // Close menu when clicking on nav links
-            navLinks.forEach(link => {
-                link.addEventListener('click', closeMobileMenu);
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    closeMobileMenu();
-                }
-            });
-
-            // Handle escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileNavMenu.classList.contains('active')) {
-                    closeMobileMenu();
-                }
-            });
-        }
-        
-        // Initialize mobile navigation
-        document.addEventListener('DOMContentLoaded', function() {
-            setupMobileNavigation();
-        });
-    </script>
 </body>
 </html>
